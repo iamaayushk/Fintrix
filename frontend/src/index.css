@@ -1,0 +1,21 @@
+@import "tailwindcss";
+.strike-green {
+    position: relative;
+    display: inline-block;
+    color: white;
+  }
+  
+  .strike-green::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: black;
+    transform: translateY(-50%);
+  }
+  *{
+    scroll-behavior: smooth;
+  }
+  
