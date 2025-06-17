@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import { Card } from './component/ui/card-hover-effect';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import NewHome from './pages/NewHome';
+import Chatbot from './pages/Chatbot';
 
 
 function App() {
@@ -21,7 +23,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logger" element={<Logger />} />
         {/* <Route path="/investment" element={<InvestmentChat />} /> */}
-        <Route path="/investment" element={<Investment />} />
+        <Route path="/investment" element={<Chatbot />} />
+        <Route path="/new" element={<NewHome />} />
 
         <Route path="/dashboard" element={<Dashboard/>} />
 

@@ -5,6 +5,7 @@ import img from '../../public/hero.png';
 import { HoverEffect } from "../component/ui/card-hover-effect";
 import { Link } from "react-router-dom";
 import { FaEnvelope } from "react-icons/fa";
+import { BackgroundBeamsWithCollision } from "../component/ui/background-beams-with-collision";
 
 // import { Card } from "../component/ui/card-hover-effect";
 
@@ -15,12 +16,12 @@ const Home = () => {
         {
           title: "Log Income and Expenses",
           description: "Track daily income, fixed expenses and variable expenses via an intuitive interface.",
-        //   link: "/finance",
+       
         },
         {
           title: "Visualize Spending",
           description: "Offers an interactive dashboard using Chart.js to categorize spending into Needs, Wants, and Savings, helping users understand their financial habits.",
-        //   link: "/investments",
+        
         },
         {
           title: "Receive AI-Powered Advice",
@@ -42,13 +43,13 @@ const Home = () => {
         }
         
       ];
-  // Add some effect to trigger animations when the component mounts
+  
   useEffect(() => {
     const text = document.querySelector(".animate-text");
     const button = document.querySelector(".animate-button");
     const image = document.querySelector(".animate-image");
 
-    // Trigger animations
+  
     setTimeout(() => {
       text.classList.remove("opacity-0");
       text.classList.add("opacity-100", "transform", "translate-x-0", "transition-all", "duration-1000");
@@ -63,13 +64,13 @@ const Home = () => {
     <div className="relative overflow-hidden ">
 
       <Navbar />
-
+<BackgroundBeamsWithCollision>
       <section
         id="home"
-        className="relative z-10 py-20 px-6 md:px-20 bg-gradient-to-r from-green-900 to-blue-900"
+        // className="relative z-10 py-20 px-6 md:px-20 bg-gradient-to-r from-green-900 to-blue-900"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between text-center md:text-left">
-          {/* Text and Button Section */}
+          
           <div className="text-center ml-10 md:text-left animate-text opacity-0 transform translate-x-[-100px]">
             <h1 className="text-[54px] font-extrabold text-white mb-4 w-[560px] ">
               How will you spend your <span className="strike-green">money</span> LIFE
@@ -85,7 +86,7 @@ const Home = () => {
             </a>
           </div>
 
-          {/* Image Section */}
+         
           <div className="mt-8 md:mt-0 animate-image opacity-0 transform translate-x-[100px]">
             <img
               src={img}
@@ -95,16 +96,16 @@ const Home = () => {
           </div>
         </div>
       </section>
+      </BackgroundBeamsWithCollision>
 
-      {/* About Section */}
 
-      <section id="about" className="relative z-10 py-20 px-6 bg-gradient-to-r from-blue-900 to-green-900 md:px-8 ">
+      <section id="about" className="relative z-10 py-20 px-6 bg-gradient-to-b from-zinc-900 to-gray-900 md:px-8 ">
         <div className="max-w-6xl mx-auto text-center md:text-left">
           <h2 className="text-5xl font-bold text-center text-white mb-6">About Fintrix</h2>
           <p className="text-lg text-gray-200 leading-relaxed mb-4">
             In today's fast-paced world, managing finances can be overwhelming especially for students and young professionals. <strong>Fintrix</strong> is built to solve this challenge by serving as your intelligent, secure, and personalized financial assistant.
           </p>
-          <HoverEffect items={items} className="space-y-8" />
+          <HoverEffect items={items} className="space-y-8 " />
           {/* <p className="text-lg text-white leading-relaxed mb-4">
             From logging your daily income and expenses to analyzing your spending behavior, Fintrix provides you with AI-powered financial advice tailored to your lifestyle. Our goal? To help you make smarter financial decisions, grow your savings, and build a more confident financial future.
           </p>
@@ -113,19 +114,19 @@ const Home = () => {
           </p> */}
         </div>
       </section>
-      <footer className="bg-gradient-to-r from-slate-800 to-teal-700 text-white px-6 py-8 md:px-16">
+      <footer className="bg-gradient-to-b from-black  to-gray-900  text-white px-6 py-8 md:px-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
 
-        {/* Logo & Tagline */}
+        
         <div>
-          <h1 className="text-2xl font-bold mb-2">Fintrix</h1>
-          <p className="text-zinc-300">AI Powered Personal Finance & Investment Advisor</p>
+          <h1 className="text-3xl font-bold mb-2 underline underline-offset-6 decoration-white">Fintrix</h1>
+          <p className="text-zinc-300 text-[12px]">AI Powered Personal Finance & Investment Advisor</p>
         </div>
 
         {/* Navigation Links */}
         <div className="flex flex-col gap-2">
-          <h2 className="font-semibold mb-2">Navigation</h2>
-          <Link to="/" className="hover:text-gray-300">Home</Link>
+          <h2 className="font-semibold mb-2 text-lg underline underline-offset-6 decoration-white">Navigation</h2>
+          <a href="#home" className="hover:text-gray-300">Home</a>
           <a href="#about" className="hover:text-gray-300">About</a>
           <Link to="/logger" className="hover:text-gray-300">Logger</Link>
           <Link to="/investment" className="hover:text-gray-300">Investment</Link>
@@ -134,7 +135,7 @@ const Home = () => {
 
         {/* Contact & Socials */}
         <div>
-          <h2 className="font-semibold mb-2">Connect</h2>
+          <h2 className="font-semibold mb-2 text-lg underline underline-offset-6 decoration-white">Connect</h2>
           <div className="flex gap-4 items-center mt-2">
             <a href="mailto:team@fintrix.com" className="hover:text-gray-300">
               <FaEnvelope size={20} />

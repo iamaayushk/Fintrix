@@ -4,7 +4,6 @@ const User = require('../models/userModel');
 const Income = require('../models/income');
 const axios = require('axios');
 
-
 // Register User
 const registerUser = async (req, res) => {
   try {
@@ -48,12 +47,12 @@ const registerUser = async (req, res) => {
   }
 };
 
-
 // Login User
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body;  
 
+   
     // Find user
     const user = await User.findOne({ email });
     if (!user) {
@@ -71,11 +70,11 @@ const loginUser = async (req, res) => {
       expiresIn: '1d',
     });
 
-    // Set token as HTTP-only cookie
+    // Set token as HTTP-only cookie with secure and sameSite attributes for better security and cross-site usage
     res.cookie('token', token, {
-      httpOnly: false,
-      // secure: process.env.NODE_ENV === 'production', // only in production
-      sameSite: 'Strict',
+      // httpOnly: true,
+      // secure: process.env.NODE_ENV === 'production', // only use secure cookies in production
+      sameSite: 'lax', // 'lax' allows sending cookies on top-level navigations
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -136,74 +135,33 @@ const dashboard = async (req, res) => {
 // Logout
 const logout = async (req, res) => {
   // Clear the token from the cookie
-  res.clearCookie('token');  // The cookie name 'token' is the one where the JWT is stored
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
 
   // Respond with a success message
   res.json({ message: 'Logged out successfully' });
 };
 
 // Post income 
-// const postIncome = async (req, res) => {
-//   const { salary, categoryExpenses, note } = req.body;
-
-//   if (!categoryExpenses) {
-//     return res.status(400).json({ message: "categoryExpenses is required." });
-//   }
-
-//   const { household = 0, personal = 0, investments = 0 } = categoryExpenses;
-
-//   if (
-//     typeof salary !== "number" ||
-//     typeof household !== "number" ||
-//     typeof personal !== "number" ||
-//     typeof investments !== "number"
-//   ) {
-//     return res.status(400).json({ message: "All amounts must be numbers." });
-//   }
-
-//   const totalSpent = household + personal + investments;
-//   const savings = salary - totalSpent;
-
-//   if (savings < 0) {
-//     return res.status(400).json({ message: "Expenses exceed salary." });
-//   }
-
-//   try {
-//     const income = new Income({
-//       userId: req.user.id,
-//       salary,
-//       categoryExpenses: {
-//         household,
-//         personal,
-//         investments,
-//       },
-//       savings,
-//       totalSpent,
-//       note,
-//     });
-
-//     await income.save();
-//     res.status(201).json(income);
-//   } catch (err) {
-//     res.status(500).json({ message: "Server error", error: err.message });
-//   }
-// }
-
-// Get Income
 const postIncome = async (req, res) => {
   const { salary, categoryExpenses, note, weeklyExpenses } = req.body;
 
-  // Validate input fields
+ 
   if (!categoryExpenses) {
     return res.status(400).json({ message: "categoryExpenses is required." });
   }
 
-  const { fixed = 0, variables = 0, investments = 0 } = categoryExpenses;
+  const { fixed = 0, food = 0, shopping = 0, entertainment = 0, investments = 0 } = categoryExpenses;
 
   if (
     typeof salary !== "number" ||
     typeof fixed !== "number" ||
-    typeof variables !== "number" ||
+    typeof food !== "number" ||
+    typeof shopping !== "number" ||
+    typeof entertainment !== "number" ||
     typeof investments !== "number"
   ) {
     return res.status(400).json({ message: "All amounts must be numbers." });
@@ -212,6 +170,9 @@ const postIncome = async (req, res) => {
   if (!Array.isArray(weeklyExpenses) || weeklyExpenses.length !== 4) {
     return res.status(400).json({ message: "Weekly expenses must be an array of 4 values." });
   }
+
+  // Calculate total variable expenses
+  const variables = food + shopping + entertainment;
 
   const totalSpent = fixed + variables + investments;
   const savings = salary - totalSpent;
@@ -228,7 +189,7 @@ const postIncome = async (req, res) => {
       categoryExpenses: {
         fixed,
         variables,
-        investments,
+        investments
       },
       weeklyExpenses,  // Store weekly expenses
       savings,
@@ -244,18 +205,68 @@ const postIncome = async (req, res) => {
   }
 };
 
-
+// Get Income
 const getIncome = async (req, res) => {
   try {
     const incomes = await Income.find({ userId: req.user.id }).sort({ date: -1 });
-    res.json(incomes);
+
+    // Modify each income to combine food + shopping + entertainment into variables
+    const modifiedIncomes = incomes.map(income => {
+      const { fixed, food = 0, shopping = 0, entertainment = 0, investments } = income.categoryExpenses;
+      const variables = food + shopping + entertainment;
+
+      return {
+        ...income._doc,  // spread all original fields
+        categoryExpenses: {
+          fixed,
+          variables,
+          investments
+        }
+      };
+    });
+
+    res.json(modifiedIncomes);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
-}
+};
+
+// Update income
+const updateWeeklyExpense = async (req, res) => {
+  const { incomeId, week, amount } = req.body;
+
+  if (!incomeId || !week || typeof amount !== 'number') {
+    return res.status(400).json({ message: "incomeId, week, and amount are required." });
+  }
+
+  try {
+    const income = await Income.findOne({ _id: incomeId, userId: req.user.id });
+
+    if (!income) {
+      return res.status(404).json({ message: "Income record not found." });
+    }
+
+    // Update the correct week's expense
+    const weekIndex = income.weeklyExpenses.findIndex(exp => exp.week === week);
+
+    if (weekIndex === -1) {
+      return res.status(400).json({ message: "Week not found in income record." });
+    }
+
+    income.weeklyExpenses[weekIndex].amount = amount;
+
+    await income.save();
+
+    res.json({ message: "Weekly expense updated successfully.", income });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
 
 
 
 
 
-module.exports = { registerUser, loginUser, postIncome, getIncome, dashboard, logout };
+
+module.exports = { registerUser, loginUser, postIncome, getIncome, dashboard, logout, updateWeeklyExpense };

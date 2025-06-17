@@ -18,8 +18,8 @@ app.use(express.json());
 // Express backend setup
 
 app.use(cors({
-  origin: "http://localhost:5173", // or wherever your frontend runs
-  credentials: true,              // VERY IMPORTANT for cookies to work
+  origin: "http://localhost:5173", 
+  credentials: true,
 }));
 
 

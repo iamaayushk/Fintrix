@@ -1,53 +1,12 @@
 const mongoose = require("mongoose");
 
-// const incomeSchema = new mongoose.Schema({
-//   userId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//     required: true,
-//   },
-//   salary: {
-//     type: Number,
-//     required: true,
-//   },
-//   breakdown: {
-//     household: {
-//       type: Number,
-//       required: true,
-//     },
-//     personal: {
-//       type: Number,
-//       required: true,
-//     },
-//     investments: {
-//       type: Number,
-//       required: true,
-//     },
-//     savings: {
-//       type: Number,
-//       default: 0,
-//     },
-//   },
-//   date: {
-//     type: Date,
-//     default: Date.now,
-//   },
-//   note: {
-//     type: String,
-//     default: "",
-//   },
-// });
-
-// module.exports = mongoose.model("Income", incomeSchema);
-
-
-
 const incomeSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
+  
   salary: {
     type: Number,
     required: true

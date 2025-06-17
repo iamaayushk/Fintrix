@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../component/Navbar";
 import img from '../../public/signup.jpg'
+import { BackgroundBeamsWithCollision } from "../component/ui/background-beams-with-collision";
 
 
 const Signup = () => {
@@ -36,16 +37,17 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 bg-gradient-to-r from-green-900 to-blue-900">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-gray-900">
       <Navbar />
-      <div className="flex items-center bg-white justify-center min-h-[70vh] space-x-8 border-2 rounded-xl m-15">
+      <BackgroundBeamsWithCollision>
+      <div className="flex items-center justify-center min-h-[70vh] space-x-8 rounded-xl m-15">
               {/* Image on the left */}
-              <img src={img} className="w-[350px] h-[250px] object-cover rounded-lg" />
+              {/* <img src={img} className="w-[350px] h-[250px] object-cover rounded-lg" /> */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-xl  w-full max-w-md space-y-4"
+          className="z-10000 bg-gradient-to-b from-zinc-600 to-zinc-900 p-8 rounded-xl  w-full max-w-md space-y-4"
         >
-          <h2 className="text-2xl font-bold text-gray-800 text-center">Create Your Account</h2>
+          <h2 className="text-2xl font-bold text-zinc-300 text-center">Create Your Account</h2>
           {error && <p className="text-red-600 text-sm text-center">{error}</p>}
           {message && <p className="text-green-600 text-sm text-center">{message}</p>}
 
@@ -55,7 +57,7 @@ const Signup = () => {
             placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3  rounded-lg bg-zinc-900 text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
             required
           />
 
@@ -65,7 +67,7 @@ const Signup = () => {
             placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3  bg-zinc-900 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
             required
           />
 
@@ -75,25 +77,26 @@ const Signup = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 bg-zinc-900 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
             required
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-900 cursor-pointer text-white font-semibold p-3 rounded-lg hover:bg-blue-800 transition"
+            className="w-full bg-blue-900 cursor-pointer text-white font-semibold p-3 rounded-lg hover:bg-gray-500 hover:text-black transition"
           >
             Sign Up
           </button>
 
-          <p className="text-sm text-center text-gray-600">
+          <p className="text-sm text-center text-gray-300">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-900 hover:underline">
+            <a href="/login" className="text-blue-500 hover:underline">
               Log In
             </a>
           </p>
         </form>
       </div>
+      </BackgroundBeamsWithCollision>   
     </div>
   );
 };

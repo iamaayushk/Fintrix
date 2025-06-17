@@ -14,14 +14,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # CORS configuration with dynamic origins
-CORS(app, resources={
-    r"/api/*": {
-        "origins": os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(","),
-        "methods": ["GET", "POST", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type"],
-        "supports_credentials": True
-    }
-})
+CORS(app, resources={r"/api/*": {
+    "origins": os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(","),
+    "methods": ["GET", "POST", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type"],
+    "supports_credentials": True
+}})
 
 # Task model for database
 class Task(db.Model):
@@ -78,6 +76,18 @@ def delete_task(task_id):
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 400
 
+@app.route('/api/finance/chat', methods=['POST'])
+def chat():
+    try:
+        data = request.get_json()
+        user_input = data.get('message', '').strip()
+        if not user_input:
+            return jsonify({'success': False, 'error': 'Empty message'}), 400
+        response = get_chat_response(user_input)
+        return jsonify({'success': True, 'response': response})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 400
+
 @app.route('/api/finance/analyze', methods=['POST'])
 def analyze_stock():
     """Analyze a stock based on ticker and budget."""
@@ -101,21 +111,6 @@ def analyze_stock():
     except Exception as e:
         return jsonify({'success': False, 'error': f'Analysis failed: {str(e)}'}), 500
 
-@app.route('/api/finance/chat', methods=['POST'])
-def chat():
-    """Handle financial chatbot queries."""
-    try:
-        data = request.get_json()
-        user_input = data.get('message', '').strip()
-        if not user_input:
-            return jsonify({'success': False, 'error': 'Empty message'}), 400
-        response = get_chat_response(user_input)
-        return jsonify({
-            'success': True,
-            'response': response
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
-
 if __name__ == '__main__':
-    app.run(debug=True, port=8888, threaded=True)
+    print("Starting Flask server on http://127.0.0.1:8888")
+    app.run(debug=True, host='127.0.0.1', port=8888, threaded=True)
