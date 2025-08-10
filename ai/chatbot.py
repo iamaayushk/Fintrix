@@ -1,10 +1,12 @@
 import pandas as pd
 from groq import Groq
+import os
 import requests
 from io import StringIO
-
+from dotenv import load_dotenv
+load_dotenv()
 # Initialize Groq client with API key
-client = Groq(api_key="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")
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # System prompt for financial advisor role
 SYSTEM_PROMPT = """
@@ -12,11 +14,13 @@ You are Fintrix, a certified financial advisor with access to live NSE stock dat
 1. Fetching and analyzing the latest NSE listed stocks
 2. Providing data-backed investment insights
 3. Conservative recommendations with risk analysis
-
+Rules:
 When discussing stocks, always:
+-Keep responses short and precise
 - Verify data from the NSE source
 - Disclose data freshness (last fetched time)
 - Highlight key metrics (ISIN, face value, listing date)
+- If unsure, say you need more data instead of guessing.
 """
 
 # Initialize conversation history

@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true, // Important for registration validation
+    required: true, 
   },
   createdAt: {
     type: Date,
