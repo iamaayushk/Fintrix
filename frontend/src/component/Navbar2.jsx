@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="hidden md:flex gap-4">
           <button
             onClick={handleLogout}
-            className="px-5 py-2 bg-black text-white rounded-sm font-semibold cursor-pointer hover:bg-zinc-100 hover:text-black transition"
+            className="px-5 py-2 bg-red-800 text-white rounded-sm font-semibold cursor-pointer hover:bg-black hover:text-red-500 transition"
           >
             Logout
           </button>

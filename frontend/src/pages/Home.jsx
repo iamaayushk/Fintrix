@@ -61,7 +61,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden ">
+    <div className="relative overflow-hidden min-h-screen">
 
       <Navbar />
 <BackgroundBeamsWithCollision>

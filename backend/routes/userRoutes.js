@@ -11,5 +11,6 @@ router.patch('/updateIncome', auth, updateWeeklyExpense);
 router.post('/logout', logout)
 router.get('/getIncome', auth, getIncome);
 
+
 // router.post('/api/finance/chat', chatbotHandler);
 module.exports = router;
